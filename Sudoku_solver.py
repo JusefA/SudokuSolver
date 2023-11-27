@@ -9,16 +9,16 @@ class SudokuGUI:
 
         self.difficulty_var = IntVar()
         difficulty_scale = Scale(self.root, label="Difficulty Level", from_=1, to=10, orient="horizontal", variable=self.difficulty_var)
-        difficulty_scale.grid(row=9, column=2, columnspan=4)
+        difficulty_scale.grid(row=10, column=0, columnspan=8, pady=10)
 
         new_puzzle_button = tk.Button(self.root, text="New Puzzle", command=self.create_new_puzzle)
-        new_puzzle_button.grid(row=9, column=0, columnspan=2)
+        new_puzzle_button.grid(row=11, column=0, columnspan=2, pady=10)
 
         check_button = tk.Button(self.root, text="Check", command=self.check_puzzle)
-        check_button.grid(row=9, column=6, columnspan=2)
+        check_button.grid(row=11, column=6, columnspan=2, pady=10)
 
         solve_button = tk.Button(self.root, text="Solve", command=self.solve_puzzle)
-        solve_button.grid(row=9, column=4, columnspan=2)
+        solve_button.grid(row=11, column=3, columnspan=2, pady=10)
 
     def generate_sudoku(self, difficulty):
         board = [[0] * 9 for _ in range(9)]
@@ -78,18 +78,17 @@ class SudokuGUI:
             return None
 
     def check_puzzle(self):
-        current_board = [[int(entry.get()) if isinstance(entry, tk.Entry) and entry.get().isdigit() else 0 for entry in self.root.grid_slaves(row=i, column=j)] for i in range(9) for j in range(9)]
-        if self.is_board_correct(current_board):
-            messagebox.showinfo("Sudoku Solver", "Sudoku is correct!")
-        else:
-            messagebox.showwarning("Sudoku Solver", "Sudoku is not correct.")
-
-    def is_board_correct(self, board):
+        current_board = [[entry.get() if isinstance(entry, tk.Entry) else "" for entry in self.root.grid_slaves(row=i, column=j)] for i in range(9) for j in range(9)]
         for i in range(9):
             for j in range(9):
-                if board[i][j] != self.board[i][j]:
-                    return False
-        return True
+                entry = self.root.grid_slaves(row=i, column=j)[0]
+                entry.config(bg="white")  # Reset background color
+
+        for i in range(9):
+            for j in range(9):
+                if current_board[i][j] != str(self.board[i][j]):
+                    entry = self.root.grid_slaves(row=i, column=j)[0]
+                    entry.config(bg="red")
 
     def solve_puzzle(self):
         solved_board = [row[:] for row in self.board]
@@ -100,6 +99,7 @@ class SudokuGUI:
                         entry = self.root.grid_slaves(row=i, column=j)[0]
                         entry.delete(0, tk.END)
                         entry.insert(0, str(solved_board[i][j]))
+                        entry.config(bg="white")  # Reset background color
             messagebox.showinfo("Sudoku Solver", "Puzzle solved!")
         else:
             messagebox.showwarning("Sudoku Solver", "No solution exists for the current puzzle.")

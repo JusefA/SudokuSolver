@@ -10,7 +10,6 @@ This Python application provides a Sudoku solver and game, built with the Tkinte
 
 - **Main Menu:** Choose difficulty levels and start the game.
 - **Gameplay:** Solve Sudoku puzzles with varying difficulty.
-- **Puzzle Checker:** Verify your solution and get feedback.
 - **Solver:** Get instant solutions to generated puzzles.
 
 ## Usage
